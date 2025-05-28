@@ -1,0 +1,93 @@
+.dashboard {
+  padding: 2rem;
+  margin: 20px 40px 20px 80px;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f7fa);
+  border: 2px solid #cce7ff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #007cf0;
+}
+
+.dashboard-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #004080;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-description {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.cards {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 240px;
+  border-radius: 16px;
+  padding: 1.5rem;
+  background: #fff;
+  border: 2px solid #d0e6ff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.card.green {
+  background-color: #e6fff5;
+  border-color: #b2f2e8;
+}
+
+.card.blue {
+  background-color: #e6f0ff;
+  border-color: #b3ccff;
+}
+
+.big-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.overview-section {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border: 2px solid #cce0ff;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.bottom-cards {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.card.outcomes,
+.card.diagnoses {
+  flex: 1;
+  min-width: 300px;
+}
+
+.legend {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.legend .dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}

@@ -1,0 +1,117 @@
+/* UploadForm.css */
+
+/* Reused SignalViewer styles */
+.signal-viewer-wrapper, 
+.signal-chart-header,
+.signal-chart-title,
+.signal-chart-desc,
+.wave-legend,
+.hoverable-legend,
+.dot {
+  /* All these classes remain exactly as in SignalViewer.css */
+}
+
+/* New UploadForm-specific styles */
+.upload-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.file-drop-zone {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid #d0e6ff;
+  text-align: center;
+}
+
+.file-input-group {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.file-input-group label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: #003366;
+}
+
+.file-input-group input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cce7ff;
+  border-radius: 8px;
+  background: #f0f9ff;
+}
+
+.drag-hint {
+  font-size: 0.9rem;
+  color: #007cf0;
+}
+
+.drag-hint span {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.form-control-group {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.form-control {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-control label {
+  font-weight: 500;
+  color: #003366;
+}
+
+.styled-select,
+.form-control input[type="number"] {
+  padding: 0.75rem;
+  border: 1px solid #cce7ff;
+  border-radius: 8px;
+  background: #f0f9ff;
+  width: 100%;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.time-inputs input {
+  width: 80px;
+}
+
+.ecg-action-button {
+  background: #007cf0;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 124, 240, 0.2);
+}
+
+.ecg-action-button:hover {
+  background: #0066cc;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px rgba(0, 124, 240, 0.3);
+}

@@ -1,0 +1,83 @@
+.signal-viewer-wrapper {
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f7fa);
+  border: 2px solid #cce7ff;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.signal-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #007cf0;
+  padding-bottom: 0.5rem;
+}
+
+.signal-chart-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 0.2rem;
+}
+
+.signal-chart-desc {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.signal-slider {
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.signal-chart-container {
+  height: 300px;
+  position: relative;
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid #d0e6ff;
+}
+
+/* LEGEND STYLING */
+.wave-legend {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.wave-legend .dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+}
+
+.wave-legend .blue {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+.wave-legend .red {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.wave-legend .green {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+.hoverable-legend {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.hoverable-legend:hover {
+  transform: translateY(-2px);
+  font-weight: bold;
+  color: #007cf0;
+}

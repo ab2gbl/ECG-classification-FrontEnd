@@ -1,0 +1,50 @@
+/* Acquisition.css */
+
+.acquisition-page {
+  padding: 2rem;
+  margin: 20px 40px 20px 80px;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f7fa);
+  border: 2px solid #cce7ff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.acquisition-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #007cf0;
+}
+
+.acquisition-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #004080;
+  margin-bottom: 0.5rem;
+}
+
+.acquisition-description {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.acquisition-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.acquisition-card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border: 2px solid #d0e6ff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Optional spacing for consistency */
+.upload-form-container,
+.signal-section,
+.features-section,
+.diagnosis-section {
+  margin-bottom: 1rem;
+}

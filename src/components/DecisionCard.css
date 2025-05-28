@@ -1,0 +1,101 @@
+/* DecisionCard.css */
+/* Centering and Layout */
+.decision-card-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Base Card Styles */
+.signal-viewer-wrapper.decision-card {
+  padding: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  background: linear-gradient(to bottom right, #f0f9ff, #e0f7fa);
+  border: 2px solid #cce7ff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Header Styles */
+.signal-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #007cf0;
+  padding-bottom: 0.5rem;
+}
+
+.signal-chart-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 0.2rem;
+}
+
+/* Decision Content Styles */
+.decision-body {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0 1rem 1rem;
+  margin-left: -1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.decision-icon {
+  flex-shrink: 0;
+}
+
+.decision-content {
+  flex: 1;
+}
+
+.decision-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #003366;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.decision-status {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+}
+
+/* Status Indicators */
+.decision-body.normal {
+  border-left: 4px solid #2E7D32;
+  background-color: rgba(46, 125, 50, 0.08);
+}
+
+.decision-body.abnormal {
+  border-left: 4px solid #C62828;
+  background-color: rgba(198, 40, 40, 0.08);
+}
+
+.decision-body.unknown {
+  border-left: 4px solid #FF8F00;
+  background-color: rgba(255, 143, 0, 0.08);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .signal-viewer-wrapper.decision-card {
+    padding: 1.25rem;
+  }
+  
+  .decision-body {
+    gap: 1rem;
+    padding: 0.8rem 0 0.8rem 0.8rem;
+    margin-left: -0.8rem;
+  }
+  
+  .signal-chart-title {
+    font-size: 1.5rem;
+  }
+}
