@@ -63,6 +63,7 @@ function Acquisition() {
       if (response.ok) {
         const data = await response.json();
         const result = data.result;
+        console.log("main result", result);
 
         setSignal(result.normalized_signal || []);
         setMasks(result.full_prediction || []);
@@ -71,6 +72,7 @@ function Acquisition() {
           result.signal_type || result.decision || "No diagnosis found"
         );
         setStartIndex(0);
+        console.log("main features", features);
       } else {
         alert("Upload failed.");
       }

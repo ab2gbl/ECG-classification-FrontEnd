@@ -4,7 +4,7 @@ import BeatFeatureViewer from "./BeatFeatureViewer";
 
 function FeatureTable({ features, signal, mask, fs }) {
   const [selectedBeat, setSelectedBeat] = useState(null);
-
+  console.log("Features:", features);
   const msFields = [
     "Duree_P_ms",
     "Duree_QRS_ms",
@@ -27,8 +27,79 @@ function FeatureTable({ features, signal, mask, fs }) {
     "t_end",
     "t_start",
   ];
+  const timeFields = [
+    "start",
+    "end",
+    "p_start",
+    "p_end",
+    "qrs_start",
+    "qrs_end",
+    "t_start",
+    "t_end",
+    "P_index",
+    "Q_index",
+    "R_index",
+    "S_index",
+    "T_index",
+  ];
+
+  // Define the order of features as they come from the backend
+  const featureOrder = [
+    "beat_number",
+    "Type",
+    "start",
+    "end",
+    "qrs_start",
+    "qrs_end",
+    "p_start",
+    "p_end",
+    "t_start",
+    "t_end",
+    "Duree_P_ms",
+    "Duree_QRS_ms",
+    "Duree_T_ms",
+    "Intervalle_PR_ms",
+    "Intervalle_QT_ms",
+    "Intervalle_ST_ms",
+    "P_index",
+    "Amplitude_P",
+    "R_index",
+    "Amplitude_R",
+    "Intervalle_RR_ms",
+    "Q_index",
+    "Amplitude_Q",
+    "S_index",
+    "Amplitude_S",
+    "T_index",
+    "Amplitude_T",
+    "T/R_ratio",
+    "P/R_ratio",
+    "QRS_area",
+    "Slope_QR",
+    "Slope_RS",
+    "P_symmetry",
+    "T_inversion",
+    "QRS_axis_estimate",
+    "Heart_rate_bpm",
+    "Premature_beat",
+    "Local_RR_variability",
+    "Local_RMSSD",
+    "Bigeminy",
+    "Trigeminy",
+  ];
 
   const formatValue = (key, value) => {
+    if (timeFields.includes(key)) {
+      // Convert to time format h:m:s:ms
+      const totalMs = (parseFloat(value) * 1000) / 250; // Convert to milliseconds
+      const hours = Math.floor(totalMs / 3600000);
+      const minutes = Math.floor((totalMs % 3600000) / 60000);
+      const seconds = Math.floor((totalMs % 60000) / 1000);
+      const milliseconds = Math.floor(totalMs % 1000);
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+    }
     if (msFields.includes(key)) {
       const divided = (parseFloat(value) * 1000) / 250;
       return isNaN(divided) ? value : divided.toFixed(2); // 2 decimal places
@@ -54,8 +125,10 @@ function FeatureTable({ features, signal, mask, fs }) {
               const csvContent =
                 "data:text/csv;charset=utf-8," +
                 [
-                  Object.keys(features[0]).join(","),
-                  ...features.map((row) => Object.values(row).join(",")),
+                  featureOrder.join(","),
+                  ...features.map((row) =>
+                    featureOrder.map((key) => row[key]).join(",")
+                  ),
                 ].join("\n");
               const encodedUri = encodeURI(csvContent);
               const link = document.createElement("a");
@@ -70,21 +143,11 @@ function FeatureTable({ features, signal, mask, fs }) {
         </div>
       </div>
 
-      {selectedBeat && (
-        <BeatFeatureViewer
-          signal={signal}
-          mask={mask}
-          beatFeatures={selectedBeat}
-          fs={fs}
-          windowStart={parseInt(selectedBeat.start)}
-        />
-      )}
-
       <div className="feature-table-scroll">
         <table className="feature-table">
           <thead>
             <tr>
-              {Object.keys(features[0]).map((key) => (
+              {featureOrder.map((key) => (
                 <th key={key}>{key}</th>
               ))}
             </tr>
@@ -99,14 +162,23 @@ function FeatureTable({ features, signal, mask, fs }) {
                 onClick={() => handleRowClick(row)}
                 style={{ cursor: "pointer" }}
               >
-                {Object.entries(row).map(([key, val], i) => (
-                  <td key={i}>{formatValue(key, val)}</td>
+                {featureOrder.map((key) => (
+                  <td key={key}>{formatValue(key, row[key])}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {selectedBeat && (
+        <BeatFeatureViewer
+          signal={signal}
+          mask={mask}
+          beatFeatures={selectedBeat}
+          fs={fs}
+          windowStart={parseInt(selectedBeat.start)}
+        />
+      )}
     </div>
   );
 }

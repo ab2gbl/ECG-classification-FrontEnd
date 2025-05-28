@@ -9,6 +9,8 @@ import {
   Legend,
   ReferenceLine,
   ResponsiveContainer,
+  ReferenceArea,
+  Customized,
 } from "recharts";
 import "./BeatFeatureViewer.css";
 
@@ -20,7 +22,8 @@ const BeatFeatureViewer = ({
   windowStart = 0,
 }) => {
   const [chartData, setChartData] = useState([]);
-
+  const [beatMask, setBeatMask] = useState([]);
+  const [yDomain, setYDomain] = useState(["auto", "auto"]);
   useEffect(() => {
     console.log("BeatFeatureViewer props:", {
       signalLength: signal?.length,
@@ -34,10 +37,12 @@ const BeatFeatureViewer = ({
 
     // Get the window of data for this beat
     //const start = parseInt(beatFeatures.start) - windowStart;
+
     const start = parseInt(beatFeatures.start);
     const end = parseInt(beatFeatures.end);
     const beatSignal = signal.slice(start, end);
     const beatMask = mask.slice(start, end);
+    setBeatMask(beatMask);
 
     console.log("Beat window:", {
       start,
@@ -56,113 +61,270 @@ const BeatFeatureViewer = ({
 
     console.log("Chart data sample:", data.slice(0, 5));
     setChartData(data);
-  }, [signal, mask, fs, beatFeatures, windowStart]);
+    if (!chartData.length) return;
+
+    const values = chartData.map((d) => d.value);
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+
+    let enforcedMin = minVal;
+    let enforcedMax = maxVal;
+
+    if (maxVal - minVal < 10) {
+      const midpoint = (minVal + maxVal) / 2;
+      enforcedMin = midpoint - 5;
+      enforcedMax = midpoint + 5;
+    }
+
+    setYDomain([enforcedMin, enforcedMax]);
+  }, [signal, mask, fs, beatFeatures, windowStart, chartData]);
+  const renderBackgroundMasks = () => {
+    const areas = [];
+    let currentType = null;
+    let areaStart = null;
+
+    chartData.forEach((point, index) => {
+      const type = beatMask[index]; // 1: P, 2: QRS, 3: T
+
+      if (type !== currentType) {
+        if (currentType !== null && areaStart !== null) {
+          areas.push({
+            type: currentType,
+            start: areaStart,
+            end: chartData[index - 1]?.time,
+          });
+        }
+        currentType = type;
+        areaStart = type ? point.time : null;
+      }
+    });
+
+    // Push the final area
+    if (currentType !== null && areaStart !== null) {
+      areas.push({
+        type: currentType,
+        start: areaStart,
+        end: chartData[chartData.length - 1]?.time,
+      });
+    }
+
+    return areas.map((area, i) => (
+      <ReferenceArea
+        key={`mask-${i}`}
+        x1={area.start}
+        x2={area.end}
+        strokeOpacity={0}
+        fill={
+          area.type === 1
+            ? "rgba(0, 0, 255, 0.1)"
+            : area.type === 2
+            ? "rgba(255, 0, 0, 0.1)"
+            : "rgba(0, 128, 0, 0.1)"
+        }
+      />
+    ));
+  };
+  const renderIntervals = () => {
+    const start = parseInt(beatFeatures.start);
+
+    const pIndices = chartData
+      .map((d, i) => (mask[start + i] === 1 ? i : null))
+      .filter((i) => i !== null);
+    const qrsIndices = chartData
+      .map((d, i) => (mask[start + i] === 2 ? i : null))
+      .filter((i) => i !== null);
+    const tIndices = chartData
+      .map((d, i) => (mask[start + i] === 3 ? i : null))
+      .filter((i) => i !== null);
+
+    if (chartData.length === 0) return null;
+
+    // Pick a baseline y position slightly below the signal
+    const signalMin = Math.min(...chartData.map((d) => d.value));
+    const yBase = signalMin - 0.5;
+
+    return (
+      <Customized
+        component={({ xAxisMap, yAxisMap }) => {
+          const xScale = Object.values(xAxisMap)[0]?.scale;
+          const yScale = Object.values(yAxisMap)[0]?.scale;
+
+          if (!xScale || !yScale) return null;
+
+          const lines = [];
+
+          // PR Interval: P start to QRS start
+          if (pIndices.length > 0 && qrsIndices.length > 0) {
+            lines.push(
+              <line
+                key="pr-interval"
+                x1={xScale(chartData[pIndices[0]].time)}
+                x2={xScale(chartData[qrsIndices[0]].time)}
+                y1={yScale(yBase)}
+                y2={yScale(yBase)}
+                stroke="purple"
+                strokeDasharray="5 5"
+                strokeWidth={2}
+              />
+            );
+          }
+
+          // QT Interval: QRS start to T end
+          if (qrsIndices.length > 0 && tIndices.length > 0) {
+            lines.push(
+              <line
+                key="qt-interval"
+                x1={xScale(chartData[qrsIndices[0]].time)}
+                x2={xScale(chartData[tIndices[tIndices.length - 1]].time)}
+                y1={yScale(yBase - 0.2)}
+                y2={yScale(yBase - 0.2)}
+                stroke="orange"
+                strokeDasharray="3 3"
+                strokeWidth={2}
+              />
+            );
+          }
+
+          // ST Interval: QRS end to T start
+          if (qrsIndices.length > 0 && tIndices.length > 0) {
+            lines.push(
+              <line
+                key="st-interval"
+                x1={xScale(chartData[qrsIndices[qrsIndices.length - 1]].time)}
+                x2={xScale(chartData[tIndices[0]].time)}
+                y1={yScale(yBase - 0.4)}
+                y2={yScale(yBase - 0.4)}
+                stroke="green"
+                strokeDasharray="6 2"
+                strokeWidth={2}
+              />
+            );
+          }
+
+          return <g>{lines}</g>;
+        }}
+      />
+    );
+  };
 
   const renderAnnotations = () => {
-    const annotations = [];
     const start = parseInt(beatFeatures.start) - windowStart;
 
-    // Add P peak
-    if (beatFeatures?.P_index) {
-      const pIdx = parseInt(beatFeatures.P_index) - windowStart - start;
-      if (pIdx >= 0 && pIdx < chartData.length) {
-        annotations.push(
-          <ReferenceLine
-            key="p-peak"
-            x={chartData[pIdx]?.time}
-            stroke="blue"
-            label={{
-              value: `P Peak\n${chartData[pIdx]?.value.toFixed(2)}`,
-              position: "top",
-              fill: "blue",
-            }}
-          />
-        );
-      }
-    }
+    const peaks = [
+      { key: "P_index", color: "blue", label: "P Peak" },
+      { key: "Q_index", color: "magenta", label: "Q Peak" },
+      { key: "R_index", color: "red", label: "R Peak" },
+      { key: "S_index", color: "cyan", label: "S Peak" },
+      { key: "T_index", color: "green", label: "T Peak" },
+    ];
 
-    // Add Q peak
-    if (beatFeatures?.Q_index) {
-      const qIdx = parseInt(beatFeatures.Q_index) - windowStart - start;
-      if (qIdx >= 0 && qIdx < chartData.length) {
-        annotations.push(
-          <ReferenceLine
-            key="q-peak"
-            x={chartData[qIdx]?.time}
-            stroke="magenta"
-            label={{
-              value: `Q Peak\n${chartData[qIdx]?.value.toFixed(2)}`,
-              position: "top",
-              fill: "magenta",
-            }}
-          />
-        );
-      }
-    }
+    const points = peaks
+      .map(({ key, color, label }) => {
+        const idx = parseInt(beatFeatures[key]) - windowStart - start;
+        if (idx >= 0 && idx < chartData.length) {
+          const point = chartData[idx];
+          return {
+            time: point.time,
+            value: point.value,
+            color,
+            label,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
 
-    // Add R peak
-    if (beatFeatures?.R_index) {
-      const rIdx = parseInt(beatFeatures.R_index) - windowStart - start;
-      if (rIdx >= 0 && rIdx < chartData.length) {
-        annotations.push(
-          <ReferenceLine
-            key="r-peak"
-            x={chartData[rIdx]?.time}
-            stroke="red"
-            label={{
-              value: `R Peak\n${chartData[rIdx]?.value.toFixed(2)}`,
-              position: "top",
-              fill: "red",
-            }}
-          />
-        );
-      }
-    }
+    return (
+      <Customized
+        component={({ xAxisMap, yAxisMap }) => {
+          const xScale = Object.values(xAxisMap)[0]?.scale;
+          const yScale = Object.values(yAxisMap)[0]?.scale;
 
-    // Add S peak
-    if (beatFeatures?.S_index) {
-      const sIdx = parseInt(beatFeatures.S_index) - windowStart - start;
-      if (sIdx >= 0 && sIdx < chartData.length) {
-        annotations.push(
-          <ReferenceLine
-            key="s-peak"
-            x={chartData[sIdx]?.time}
-            stroke="cyan"
-            label={{
-              value: `S Peak\n${chartData[sIdx]?.value.toFixed(2)}`,
-              position: "top",
-              fill: "cyan",
-            }}
-          />
-        );
-      }
-    }
+          if (!xScale || !yScale) return null;
 
-    // Add T peak
-    if (beatFeatures?.T_index) {
-      const tIdx = parseInt(beatFeatures.T_index) - windowStart - start;
-      if (tIdx >= 0 && tIdx < chartData.length) {
-        annotations.push(
-          <ReferenceLine
-            key="t-peak"
-            x={chartData[tIdx]?.time}
-            stroke="green"
-            label={{
-              value: `T Peak\n${chartData[tIdx]?.value.toFixed(2)}`,
-              position: "top",
-              fill: "green",
-            }}
-          />
-        );
-      }
-    }
+          return (
+            <g>
+              {points.map((pt, i) => {
+                const x = xScale(pt.time);
+                const y = yScale(pt.value);
 
-    return annotations;
+                return (
+                  <g key={i}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={5}
+                      fill={pt.color}
+                      stroke="white"
+                      strokeWidth={1}
+                    />
+                    <text x={x + 6} y={y - 6} fill={pt.color} fontSize={12}>
+                      {`${pt.label}: ${pt.value.toFixed(2)} @ ${pt.time.toFixed(
+                        2
+                      )}s`}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        }}
+      />
+    );
   };
 
   if (!signal || !mask || !beatFeatures) {
     return <div>No data available</div>;
   }
+
+  const CustomLegend = () => (
+    <div style={{ display: "flex", flexDirection: "column", fontSize: "14px" }}>
+      {[
+        { name: "ECG Signal", color: "black", dash: "0" },
+        { name: "P Wave", color: "blue", dash: "0" },
+        { name: "QRS Complex", color: "red", dash: "0" },
+        { name: "T Wave", color: "green", dash: "0" },
+        { name: "PR Interval", color: "purple", dash: "4,4" },
+        { name: "QT Interval", color: "orange", dash: "3,3" },
+        { name: "ST Interval", color: "darkgreen", dash: "5,2" },
+      ].map((item) => (
+        <div
+          key={item.name}
+          style={{ display: "flex", alignItems: "center", marginBottom: 4 }}
+        >
+          <svg width="24" height="10">
+            <line
+              x1="0"
+              y1="5"
+              x2="20"
+              y2="5"
+              stroke={item.color}
+              strokeWidth="2"
+              strokeDasharray={item.dash}
+            />
+          </svg>
+          <span style={{ marginLeft: 4 }}>{item.name}</span>
+        </div>
+      ))}
+      {[
+        { name: "Amplitude P", color: "blue", dash: "0" },
+        { name: "Amplitude Q", color: "magenta", dash: "0" },
+        { name: "Amplitude R", color: "red", dash: "0" },
+        { name: "Amplitude S", color: "cyan", dash: "0" },
+        { name: "Amplitude T", color: "green", dash: "0" },
+      ].map((item) => (
+        <div
+          key={item.name}
+          style={{ display: "flex", alignItems: "center", marginBottom: 4 }}
+        >
+          <svg width="16" height="16">
+            <circle cx="8" cy="8" r="4" fill={item.color} />
+          </svg>
+          <span style={{ marginLeft: 4 }}>{item.name}</span>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="beat-feature-viewer">
@@ -177,12 +339,24 @@ const BeatFeatureViewer = ({
             <XAxis
               dataKey="time"
               label={{ value: "Time (s)", position: "bottom" }}
+              //type="time"
+              //tickCount={5}
+              //tickFormatter={(value) => value.toFixed(2)}
+              domain={["auto", "auto"]}
             />
             <YAxis
               label={{ value: "Amplitude", angle: -90, position: "left" }}
+              domain={yDomain}
+              tick={false}
             />
             <Tooltip />
-            <Legend />
+            <Legend
+              verticalAlign="left"
+              //layout="horizontal"
+              //horizontalAlign="left"
+              content={<CustomLegend />}
+            />
+
             <Line
               type="monotone"
               dataKey="value"
@@ -211,6 +385,8 @@ const BeatFeatureViewer = ({
               dot={false}
               name="T Wave"
             />
+            {renderBackgroundMasks()}
+            {renderIntervals()}
             {renderAnnotations()}
           </LineChart>
         </ResponsiveContainer>
