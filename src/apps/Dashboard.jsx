@@ -2,6 +2,7 @@
 import React from "react";
 import "./Dashboard.css";
 import SignalFeaturesViewer from "../components/SignalFeaturesViewer";
+import SignalsTable from "../components/SignalsTable";
 import {
   PieChart,
   Pie,
@@ -130,7 +131,9 @@ function Dashboard() {
         </div>
       </div>
 
-      <SignalFeaturesViewer signalFeatures={mockSignalFeatures} />
+      <div className="signals-table-section">
+        <SignalsTable />
+      </div>
     </div>
   );
 }

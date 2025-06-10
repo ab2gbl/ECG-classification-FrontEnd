@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import UploadForm from "../components/UploadForm";
 import SignalViewer from "../components/SignalViewer";
 import FeatureTable from "../components/FeatureTable";
@@ -7,6 +8,7 @@ import SignalFeaturesViewer from "../components/SignalFeaturesViewer";
 import "./Acquisition.css";
 
 function Acquisition() {
+  const location = useLocation();
   const [dat, setDat] = useState(null);
   const [hea, setHea] = useState(null);
   const [signal, setSignal] = useState(null);
@@ -22,6 +24,19 @@ function Acquisition() {
   const [model, setModel] = useState("UNet");
   const [signalStart, setSignalStart] = useState(0);
   const [signalEnd, setSignalEnd] = useState(10);
+
+  // Handle signal data passed from the table
+  useEffect(() => {
+    if (location.state?.signalData) {
+      const data = location.state.signalData;
+      setSignal(data.normalized_signal || []);
+      setMasks(data.full_prediction || []);
+      setFeatures(data.features || {});
+      setDecision(data.signal_type || "No diagnosis found");
+      setSignalFeatures(data.signal_features || {});
+      setStartIndex(0);
+    }
+  }, [location.state]);
 
   const handleDatChange = (e) => setDat(e.target.files[0]);
   const handleHeaChange = (e) => setHea(e.target.files[0]);
@@ -67,12 +82,12 @@ function Acquisition() {
     formData.append("start_step", 0);
     formData.append("end_step", endStep);
 
+    const API_URL = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(
-        //"http://127.0.0.1:8000/acquisition/FullDetectionView/",
-        "http://127.0.0.1:5000/",
+        `${API_URL}/FullDetectionView/`,
+        //,
         {
-          //const response = await fetch("http://127.0.0.1:5000/", {
           method: "POST",
           body: formData,
         }
@@ -151,7 +166,7 @@ function Acquisition() {
           </div>
         )}
 
-        {features && features.length > 0 && (
+        {features && Object.keys(features).length > 0 && (
           <div className="features-section">
             <FeatureTable
               features={features}
@@ -162,7 +177,7 @@ function Acquisition() {
           </div>
         )}
 
-        {signalFeatures && signalFeatures.length > 0 && (
+        {signalFeatures && Object.keys(signalFeatures).length > 0 && (
           <div className="signal-features-section">
             <SignalFeaturesViewer signalFeatures={signalFeatures} />
           </div>
