@@ -4,24 +4,19 @@ import "./DecisionCard.css";
 import { CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 
 function DecisionCard({ decision }) {
-  const cleanDecision = decision?.toLowerCase() || "";
+  const cleanDecision = decision?.trim().toLowerCase() || "";
 
   let icon = <AlertTriangle size={32} color="#FF8F00" />;
   let status = "Unknown";
   let colorClass = "unknown";
   let statusColor = "#FF8F00";
 
-  if (cleanDecision.includes("Normal") || cleanDecision.includes("n")) {
+  if (cleanDecision === "Normal") {
     icon = <CheckCircle size={32} color="#2E7D32" />;
     status = "Normal";
     colorClass = "normal";
     statusColor = "#2E7D32";
-  } else if (
-    cleanDecision.includes("Abnormal") ||
-    cleanDecision.includes("v") ||
-    cleanDecision.includes("l") ||
-    cleanDecision.includes("r")
-  ) {
+  } else if (cleanDecision) {
     icon = <XCircle size={32} color="#C62828" />;
     status = "Abnormal";
     colorClass = "abnormal";
@@ -50,3 +45,4 @@ function DecisionCard({ decision }) {
 }
 
 export default DecisionCard;
+

@@ -1,0 +1,125 @@
+.signal-features-viewer {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.signal-features-viewer h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.feature-section {
+  margin-bottom: 30px;
+}
+
+.feature-section h3 {
+  color: #34495e;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.feature-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.feature-section th,
+.feature-section td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.feature-section th {
+  background-color: #3498db;
+  color: white;
+  font-weight: 600;
+}
+
+.feature-section tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+.feature-section tr:hover {
+  background-color: #e9ecef;
+}
+
+.feature-section td:first-child {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .signal-features-viewer {
+    padding: 10px;
+  }
+
+  .feature-section table {
+    font-size: 0.9rem;
+  }
+
+  .feature-section th,
+  .feature-section td {
+    padding: 8px;
+  }
+}
+
+.beat-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.beat-metrics-column {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.beat-metrics-column h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+.beat-metrics-column table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.beat-metrics-column td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.beat-metrics-column td:first-child {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.beat-metrics-column td:last-child {
+  text-align: right;
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .beat-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

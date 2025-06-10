@@ -3,6 +3,7 @@ import UploadForm from "../components/UploadForm";
 import SignalViewer from "../components/SignalViewer";
 import FeatureTable from "../components/FeatureTable";
 import DecisionCard from "../components/DecisionCard";
+import SignalFeaturesViewer from "../components/SignalFeaturesViewer";
 import "./Acquisition.css";
 
 function Acquisition() {
@@ -11,8 +12,10 @@ function Acquisition() {
   const [signal, setSignal] = useState(null);
   const [masks, setMasks] = useState(null);
   const [features, setFeatures] = useState(null);
+  const [signalFeatures, setSignalFeatures] = useState(null);
   const [decision, setDecision] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [model, setModel] = useState("UNet");
   const [signalStart, setSignalStart] = useState(0);
@@ -44,21 +47,26 @@ function Acquisition() {
       return;
     }
 
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("ecg_dat", dat);
     formData.append("ecg_hea", hea);
     formData.append("model", model);
-    formData.append("start_step", 0); // hardcoded
-    formData.append("end_step", 4); // hardcoded
+    formData.append("start_step", 0);
+    formData.append("end_step", 5);
     formData.append("signal_start", signalStart);
     formData.append("signal_end", signalEnd);
 
     try {
-      //const response = await fetch("http://127.0.0.1:8000/acquisition/FullDetectionView/", {
-      const response = await fetch("http://127.0.0.1:5000/", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        //"http://127.0.0.1:8000/acquisition/FullDetectionView/",
+        "http://127.0.0.1:5000/",
+        {
+          //const response = await fetch("http://127.0.0.1:5000/", {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -71,6 +79,7 @@ function Acquisition() {
         setDecision(
           result.signal_type || result.decision || "No diagnosis found"
         );
+        setSignalFeatures(result.signal_features || []);
         setStartIndex(0);
         console.log("main features", features);
       } else {
@@ -79,6 +88,8 @@ function Acquisition() {
     } catch (err) {
       console.error("Upload error:", err);
       alert("Error uploading file.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +116,15 @@ function Acquisition() {
           handleSignalStartChange={handleSignalStartChange}
           handleSignalEndChange={handleSignalEndChange}
           handleSubmit={handleSubmit}
+          isLoading={isLoading}
         />
+
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="loading-spinner"></div>
+            <p>Processing ECG data...</p>
+          </div>
+        )}
 
         {signal && signal.length > 0 && (
           <div className="signal-section">
@@ -126,6 +145,12 @@ function Acquisition() {
               mask={masks}
               fs={250}
             />
+          </div>
+        )}
+
+        {features && features.length > 0 && (
+          <div className="signal-features-section">
+            <SignalFeaturesViewer signalFeatures={signalFeatures} />
           </div>
         )}
 

@@ -1,6 +1,7 @@
 // src/apps/Dashboard.jsx
 import React from "react";
 import "./Dashboard.css";
+import SignalFeaturesViewer from "../components/SignalFeaturesViewer";
 import {
   PieChart,
   Pie,
@@ -11,7 +12,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid
+  CartesianGrid,
 } from "recharts";
 
 const pieData = [
@@ -33,12 +34,22 @@ const lineData = [
 ];
 
 function Dashboard() {
+  // Mock signal features data for demonstration
+  const mockSignalFeatures = {
+    duree_qrs_ms_mean: 232.8,
+    duree_qrs_ms_std: 27.33,
+    duree_qrs_ms_min: 204,
+    duree_qrs_ms_max: 264,
+    // ... other features will be populated from actual data
+  };
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
         <h1 className="dashboard-title">📊 Dashboard</h1>
         <p className="dashboard-description">
-          AI-powered signal segmentation, feature extraction, and diagnosis of cardiac abnormalities
+          AI-powered signal segmentation, feature extraction, and diagnosis of
+          cardiac abnormalities
         </p>
       </div>
 
@@ -86,14 +97,29 @@ function Dashboard() {
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
           <div className="legend">
-            <p><span className="dot" style={{ backgroundColor: COLORS[0] }}></span> 72% Normal</p>
-            <p><span className="dot" style={{ backgroundColor: COLORS[1] }}></span> 28% Abnormal</p>
+            <p>
+              <span
+                className="dot"
+                style={{ backgroundColor: COLORS[0] }}
+              ></span>{" "}
+              72% Normal
+            </p>
+            <p>
+              <span
+                className="dot"
+                style={{ backgroundColor: COLORS[1] }}
+              ></span>{" "}
+              28% Abnormal
+            </p>
           </div>
         </div>
 
@@ -103,6 +129,8 @@ function Dashboard() {
           <p>dfopsdofso</p>
         </div>
       </div>
+
+      <SignalFeaturesViewer signalFeatures={mockSignalFeatures} />
     </div>
   );
 }

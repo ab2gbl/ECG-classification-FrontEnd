@@ -1,7 +1,7 @@
 /* UploadForm.css */
 
 /* Reused SignalViewer styles */
-.signal-viewer-wrapper, 
+.signal-viewer-wrapper,
 .signal-chart-header,
 .signal-chart-title,
 .signal-chart-desc,
@@ -114,4 +114,21 @@
   background: #0066cc;
   transform: translateY(-1px);
   box-shadow: 0 6px 8px rgba(0, 124, 240, 0.3);
+}
+
+.ecg-action-button.loading {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.ecg-action-button:disabled {
+  cursor: not-allowed;
+}
+
+input:disabled,
+select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
