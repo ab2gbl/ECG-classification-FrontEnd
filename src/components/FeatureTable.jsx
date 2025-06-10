@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./FeatureTable.css";
 import BeatFeatureViewer from "./BeatFeatureViewer";
+import HeartRatePlot from "./HeartRatePlot";
 
 // Define the order of features as they come from the backend
 const featureOrder = [
@@ -406,6 +407,9 @@ function FeatureTable({ features, signal, mask, fs }) {
           fs={fs}
           windowStart={parseInt(selectedBeat.start)}
         />
+      )}
+      {features && features.length > 0 && (
+        <HeartRatePlot features={features} fs={fs} />
       )}
     </div>
   );

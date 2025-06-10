@@ -8,11 +8,15 @@ function UploadForm({
   model,
   signalStart,
   signalEnd,
+  startStep,
+  endStep,
   handleDatChange,
   handleHeaChange,
   handleModelChange,
   handleSignalStartChange,
   handleSignalEndChange,
+  handleStartStepChange,
+  handleEndStepChange,
   handleSubmit,
   isLoading,
 }) {
@@ -43,6 +47,7 @@ function UploadForm({
                 type="file"
                 onChange={handleHeaChange}
                 disabled={isLoading}
+                accept=".hea"
               />
             </label>
             <label>
@@ -51,6 +56,7 @@ function UploadForm({
                 type="file"
                 onChange={handleDatChange}
                 disabled={isLoading}
+                accept=".dat"
               />
             </label>
           </div>
@@ -89,9 +95,28 @@ function UploadForm({
                 value={signalEnd}
                 onChange={handleSignalEndChange}
                 min={signalStart + 1}
+                max={signalStart + 120}
                 disabled={isLoading}
               />
             </div>
+          </div>
+
+          <div className="form-control">
+            <label>End Step</label>
+            <select
+              value={endStep}
+              onChange={handleEndStepChange}
+              className="styled-select"
+              disabled={isLoading}
+            >
+              <option value="0">Acquisition</option>
+              <option value="1">Mask detection</option>
+              <option value="2">Mask fixing</option>
+              <option value="3">Beats features extraction</option>
+              <option value="4">Beats classification</option>
+              <option value="5">Full signal classification</option>
+              <option value="6">Save to database</option>
+            </select>
           </div>
         </div>
 

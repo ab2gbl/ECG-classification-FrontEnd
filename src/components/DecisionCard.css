@@ -69,17 +69,17 @@
 
 /* Status Indicators */
 .decision-body.normal {
-  border-left: 4px solid #2E7D32;
+  border-left: 4px solid #2e7d32;
   background-color: rgba(46, 125, 50, 0.08);
 }
 
 .decision-body.abnormal {
-  border-left: 4px solid #C62828;
+  border-left: 4px solid #c62828;
   background-color: rgba(198, 40, 40, 0.08);
 }
 
 .decision-body.unknown {
-  border-left: 4px solid #FF8F00;
+  border-left: 4px solid #ff8f00;
   background-color: rgba(255, 143, 0, 0.08);
 }
 
@@ -88,13 +88,13 @@
   .signal-viewer-wrapper.decision-card {
     padding: 1.25rem;
   }
-  
+
   .decision-body {
     gap: 1rem;
     padding: 0.8rem 0 0.8rem 0.8rem;
     margin-left: -0.8rem;
   }
-  
+
   .signal-chart-title {
     font-size: 1.5rem;
   }

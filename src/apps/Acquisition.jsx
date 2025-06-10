@@ -16,6 +16,8 @@ function Acquisition() {
   const [decision, setDecision] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [startStep, setStartStep] = useState(0);
+  const [endStep, setEndStep] = useState(2);
 
   const [model, setModel] = useState("UNet");
   const [signalStart, setSignalStart] = useState(0);
@@ -40,6 +42,14 @@ function Acquisition() {
     }
   };
 
+  const handleStartStepChange = (e) => {
+    setStartStep(parseInt(e.target.value, 10));
+  };
+
+  const handleEndStepChange = (e) => {
+    setEndStep(parseInt(e.target.value, 10));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!hea || !dat) {
@@ -52,10 +62,10 @@ function Acquisition() {
     formData.append("ecg_dat", dat);
     formData.append("ecg_hea", hea);
     formData.append("model", model);
-    formData.append("start_step", 0);
-    formData.append("end_step", 5);
     formData.append("signal_start", signalStart);
     formData.append("signal_end", signalEnd);
+    formData.append("start_step", 0);
+    formData.append("end_step", endStep);
 
     try {
       const response = await fetch(
@@ -110,11 +120,15 @@ function Acquisition() {
           model={model}
           signalStart={signalStart}
           signalEnd={signalEnd}
+          startStep={startStep}
+          endStep={endStep}
           handleDatChange={handleDatChange}
           handleHeaChange={handleHeaChange}
           handleModelChange={handleModelChange}
           handleSignalStartChange={handleSignalStartChange}
           handleSignalEndChange={handleSignalEndChange}
+          handleStartStepChange={handleStartStepChange}
+          handleEndStepChange={handleEndStepChange}
           handleSubmit={handleSubmit}
           isLoading={isLoading}
         />
@@ -148,7 +162,7 @@ function Acquisition() {
           </div>
         )}
 
-        {features && features.length > 0 && (
+        {signalFeatures && signalFeatures.length > 0 && (
           <div className="signal-features-section">
             <SignalFeaturesViewer signalFeatures={signalFeatures} />
           </div>
