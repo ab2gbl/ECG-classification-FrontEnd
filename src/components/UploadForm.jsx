@@ -76,6 +76,7 @@ function UploadForm({
             >
               <option value="UNet">UNet</option>
               <option value="TCN">TCN</option>
+              <option value="CNN_LSTM">CNN_LSTM</option>
             </select>
           </div>
 

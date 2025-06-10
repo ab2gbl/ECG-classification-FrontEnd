@@ -38,5 +38,104 @@ def get_result():
     time.sleep(2)
     return jsonify(result), 200
 
+@app.route('/acquisition/getSignals/', methods=['GET'])
+def get_signals():
+    signals = [
+        {
+            "name": "unknown",
+            "timestamp": "2025-06-10T17:58:56.261394Z",
+            "disease": "Abnormal: No Sinus bradycardia, No Sinus arrhythmia, No Supraventricular tachycardia, No Sinus tachycardia."
+        },
+        {
+            "name": "unknown",
+            "timestamp": "2025-06-08T13:46:55.207204Z",
+            "disease": "Abnormal: No Sinus bradycardia, Sinus arrhythmia, No Supraventricular tachycardia, No Sinus tachycardia."
+        },
+        {
+            "name": "100 from 1517 to 1580",
+            "timestamp": "2025-06-08T07:37:08.692347Z",
+            "disease": "Abnormal: No Sinus bradycardia, No Sinus arrhythmia, No Supraventricular tachycardia, No Sinus tachycardia."
+        },
+        {
+            "name": "100 from 1517 to 1580",
+            "timestamp": "2025-06-02T12:49:23.308238Z",
+            "disease": "Abnormal: Not Sinus bradycardia"
+        },
+        {
+            "name": "100 from 1517 to 1580",
+            "timestamp": "2025-06-02T12:30:48.169782Z",
+            "disease": "Abnormal: Not Sinus bradycardia"
+        },
+        {
+            "name": "100 from 1517 to 1525",
+            "timestamp": "2025-06-02T10:39:25.261616Z",
+            "disease": "Normal"
+        },
+        {
+            "name": "100 from 20 to 35",
+            "timestamp": "2025-05-31T19:23:27.322405Z",
+            "disease": "Abnormal: Not Sinus bradycardia"
+        },
+        {
+            "name": "100 from 40 to 55",
+            "timestamp": "2025-05-31T10:03:15.282937Z",
+            "disease": "Abnormal: Not Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-31T09:53:13.298873Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-19T12:57:48.172657Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-19T12:57:33.399737Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-19T12:55:58.240147Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-19T12:55:42.323673Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-19T12:48:04.932536Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-18T14:57:04.115780Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-18T14:55:34.185433Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-18T14:33:51.378569Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        },
+        {
+            "name": "100 from 10 to 15",
+            "timestamp": "2025-05-18T14:29:41.922284Z",
+            "disease": "Abnormal: Sinus bradycardia"
+        }
+    ]
+    
+    return jsonify({
+        "status": "success",
+        "signals": signals
+    })
 if __name__ == '__main__':
     app.run(debug=True)

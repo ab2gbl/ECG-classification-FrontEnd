@@ -91,3 +91,24 @@
   border-radius: 50%;
   margin-right: 0.5rem;
 }
+
+.signals-table-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.signals-table-section .MuiTableContainer-root {
+  margin-top: 1rem;
+}
+
+.signals-table-section .MuiTableCell-head {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.signals-table-section .MuiTableRow-root:hover {
+  background-color: #f8f9fa;
+}
