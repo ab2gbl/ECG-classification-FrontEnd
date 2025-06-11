@@ -17,7 +17,7 @@ function DecisionCard({ decision }) {
     status = "Normal";
     colorClass = "normal";
     statusColor = "#2E7D32";
-  } else if (cleanDecision.startsWith("Abnormal")) {
+  } else if (cleanDecision.startsWith("abnormal")) {
     icon = <XCircle size={32} color="#C62828" />;
     status = "Abnormal";
     colorClass = "abnormal";

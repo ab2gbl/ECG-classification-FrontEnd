@@ -60,7 +60,6 @@ function FeatureTable({ features, signal, mask, fs }) {
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const beatsPerPage = 10;
 
-  console.log("Features:", features);
   const msFields = [
     "Duree_P_ms",
     "Duree_QRS_ms",

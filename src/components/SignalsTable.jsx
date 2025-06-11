@@ -17,13 +17,12 @@ const SignalsTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchSignals = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8000/acquisition/getSignals/"
-        );
+        const response = await fetch(`${API_URL}/acquisition/getSignals/`);
         const data = await response.json();
         if (data.status === "success") {
           setSignals(data.signals);
@@ -39,7 +38,6 @@ const SignalsTable = () => {
   }, []);
 
   const handleRowClick = async (signal) => {
-    const API_URL = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(
         `${API_URL}/acquisition/getSignal/?name=${encodeURIComponent(

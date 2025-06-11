@@ -1,0 +1,320 @@
+.ecg-websocket-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ecg-websocket-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.ecg-websocket-header h1 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.ecg-websocket-header p {
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
+/* Signal Status Styles */
+.signal-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.status-indicator {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.status-indicator.ready {
+  color: #2ecc71;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.not-ready {
+  color: #e74c3c;
+}
+
+.status-text {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.signal-length {
+  color: #7f8c8d;
+  font-size: 0.9em;
+  margin-left: auto;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Control Section Styles */
+.control-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  /* position: sticky; */
+  top: 20px;
+  z-index: 100;
+}
+
+.upload-section {
+  width: 100%;
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chunk-size-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chunk-size-control input {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 80px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.control-button:hover {
+  background-color: #2980b9;
+}
+
+.control-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fde2e2;
+  border-radius: 4px;
+}
+
+.status-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.status-section h3 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.chunk-info {
+  font-family: monospace;
+  color: #34495e;
+}
+
+/* Chunks Display Section Styles */
+.chunks-display-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chunks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #3498db;
+}
+
+.chunks-header h2 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.chunks-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.no-chunks-message {
+  text-align: center;
+  padding: 40px;
+  background: #fff;
+  border-radius: 8px;
+  color: #7f8c8d;
+  font-size: 1.1em;
+}
+
+.chunk-section {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 4px solid #3498db;
+  overflow: hidden;
+}
+
+.chunk-header {
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.chunk-header:hover {
+  background-color: #f8f9fa;
+}
+
+.chunk-header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.chunk-header h3 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.normal {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: #27ae60;
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.status-badge.abnormal {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #c0392b;
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.chunk-toggle {
+  color: #7f8c8d;
+  font-size: 1.2em;
+  transition: transform 0.3s;
+  margin-left: 15px;
+}
+
+.chunk-content {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signal-section,
+.features-section,
+.signal-features-section,
+.diagnosis-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.signal-section {
+  min-height: 300px;
+}
+
+.features-section {
+  overflow-x: auto;
+}
+
+.diagnosis-section {
+  text-align: center;
+  background-color: #f8f9fa;
+}
+
+/* Add smooth scrolling to the page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Style the scrollbar */
+.chunks-display-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chunks-display-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.chunks-display-section::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.chunks-display-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
