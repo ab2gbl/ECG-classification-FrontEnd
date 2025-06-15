@@ -43,12 +43,26 @@
   color: #003366;
 }
 
-.file-input-group input[type="file"] {
-  width: 100%;
+.file-input-group input[type="file"],
+.file-input-group input[type="text"] {
+  width: 95%;
   padding: 0.75rem;
   border: 1px solid #cce7ff;
   border-radius: 8px;
   background: #f0f9ff;
+  font-size: 0.9rem;
+  color: #003366;
+  transition: all 0.2s;
+}
+
+.file-input-group input[type="text"]:focus {
+  outline: none;
+  border-color: #007cf0;
+  box-shadow: 0 0 0 2px rgba(0, 124, 240, 0.1);
+}
+
+.file-input-group input[type="text"]::placeholder {
+  color: #99c2ff;
 }
 
 .drag-hint {

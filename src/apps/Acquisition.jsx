@@ -24,6 +24,7 @@ function Acquisition() {
   const [model, setModel] = useState("UNet");
   const [signalStart, setSignalStart] = useState(0);
   const [signalEnd, setSignalEnd] = useState(10);
+  const [name, setName] = useState("");
 
   // Handle signal data passed from the table
   useEffect(() => {
@@ -41,6 +42,7 @@ function Acquisition() {
   const handleDatChange = (e) => setDat(e.target.files[0]);
   const handleHeaChange = (e) => setHea(e.target.files[0]);
   const handleModelChange = (e) => setModel(e.target.value);
+  const handleNameChange = (e) => setName(e.target.value);
 
   const handleSignalStartChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -81,11 +83,12 @@ function Acquisition() {
     formData.append("signal_end", signalEnd);
     formData.append("start_step", 0);
     formData.append("end_step", endStep);
+    formData.append("name", name);
 
     const API_URL = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(
-        `${API_URL}/FullDetectionView/`,
+        `${API_URL}/acquisition/FullDetectionView/`,
         //,
         {
           method: "POST",
@@ -133,6 +136,7 @@ function Acquisition() {
           dat={dat}
           hea={hea}
           model={model}
+          name={name}
           signalStart={signalStart}
           signalEnd={signalEnd}
           startStep={startStep}
@@ -140,6 +144,7 @@ function Acquisition() {
           handleDatChange={handleDatChange}
           handleHeaChange={handleHeaChange}
           handleModelChange={handleModelChange}
+          handleNameChange={handleNameChange}
           handleSignalStartChange={handleSignalStartChange}
           handleSignalEndChange={handleSignalEndChange}
           handleStartStepChange={handleStartStepChange}

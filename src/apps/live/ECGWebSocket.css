@@ -149,6 +149,30 @@
   margin-bottom: 10px;
 }
 
+.global-beat-counts {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.global-beat-counts h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 0.95em;
+}
+
+.global-beat-counts .beat-counts-summary {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.global-beat-counts .beat-count {
+  font-weight: 600;
+  background: #f8f9fa;
+}
+
 .chunk-info {
   font-family: monospace;
   color: #34495e;
@@ -317,4 +341,30 @@ html {
 
 .chunks-display-section::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.chunk-header-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.beat-counts-summary {
+  display: flex;
+  gap: 8px;
+  font-size: 0.9em;
+  color: #2c3e50;
+  background: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.beat-count {
+  font-family: monospace;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #dee2e6;
 }

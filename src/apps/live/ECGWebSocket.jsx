@@ -1,10 +1,45 @@
 import React, { useState, useEffect, useRef } from "react";
 import ECGUploader from "./ECGUploader";
-import SignalViewer from "../../components/SignalViewer";
-import FeatureTable from "../../components/FeatureTable";
-import DecisionCard from "../../components/DecisionCard";
-import SignalFeaturesViewer from "../../components/SignalFeaturesViewer";
+import ChunkSection from "./ChunkSection";
 import "./ECGWebSocket.css";
+
+const GlobalBeatCounts = ({ chunks }) => {
+  const totalCounts = chunks.reduce((acc, chunk) => {
+    if (chunk.signalFeatures) {
+      acc.count_n = (acc.count_n || 0) + (chunk.signalFeatures.count_n || 0);
+      acc.count_v = (acc.count_v || 0) + (chunk.signalFeatures.count_v || 0);
+      acc.count_l = (acc.count_l || 0) + (chunk.signalFeatures.count_l || 0);
+      acc.count_r = (acc.count_r || 0) + (chunk.signalFeatures.count_r || 0);
+      acc["count_/"] =
+        (acc["count_/"] || 0) + (chunk.signalFeatures["count_/"] || 0);
+      acc.count_else =
+        (acc.count_else || 0) + (chunk.signalFeatures.count_else || 0);
+    }
+    return acc;
+  }, {});
+
+  const counts = [
+    { label: "N", value: totalCounts.count_n || 0 },
+    { label: "V", value: totalCounts.count_v || 0 },
+    { label: "L", value: totalCounts.count_l || 0 },
+    { label: "R", value: totalCounts.count_r || 0 },
+    { label: "/", value: totalCounts["count_/"] || 0 },
+    { label: "else", value: totalCounts.count_else || 0 },
+  ];
+
+  return (
+    <div className="global-beat-counts">
+      <h4>Global Beat Counts:</h4>
+      <div className="beat-counts-summary">
+        {counts.map(({ label, value }) => (
+          <span key={label} className="beat-count">
+            {label} : {value}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const ECGWebSocket = () => {
   const [signal, setSignal] = useState([]);
@@ -13,7 +48,7 @@ const ECGWebSocket = () => {
   const [startChunk, setStartChunk] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
-  const [startIndex, setStartIndex] = useState(0);
+  //const [startIndex, setStartIndex] = useState(0);
   const [chunksData, setChunksData] = useState([]);
   const [expandedChunks, setExpandedChunks] = useState(new Set());
   const [chunkStartIndices, setChunkStartIndices] = useState({});
@@ -279,6 +314,7 @@ const ECGWebSocket = () => {
                 s)
               </p>
             )}
+            <GlobalBeatCounts chunks={chunksData} />
           </div>
         </div>
       </div>
@@ -305,79 +341,17 @@ const ECGWebSocket = () => {
             results.
           </div>
         ) : (
-          chunksData.map((chunk, index) => (
-            <div key={chunk.requestId} className="chunk-section">
-              <div
-                className="chunk-header"
-                onClick={() => toggleChunk(chunk.requestId)}
-              >
-                <div className="chunk-header-left">
-                  <h3>
-                    Chunk {chunk.chunkName} (
-                    {new Date(chunk.timestamp).toLocaleTimeString()})
-                  </h3>
-                  {chunk.decision && (
-                    <div
-                      className={`status-badge ${
-                        chunk.decision.toLowerCase().includes("abnormal")
-                          ? "abnormal"
-                          : "normal"
-                      }`}
-                    >
-                      {chunk.decision.toLowerCase().includes("abnormal")
-                        ? "Abnormal"
-                        : "Normal"}
-                    </div>
-                  )}
-                </div>
-                <span className="chunk-toggle">
-                  {expandedChunks.has(chunk.requestId) ? "▼" : "▶"}
-                </span>
-              </div>
-
-              {expandedChunks.has(chunk.requestId) && (
-                <div className="chunk-content">
-                  {chunk.signal && chunk.signal.length > 0 && (
-                    <div className="signal-section">
-                      <SignalViewer
-                        signal={chunk.signal}
-                        masks={chunk.masks}
-                        startIndex={chunkStartIndices[chunk.requestId] || 0}
-                        setStartIndex={(newIndex) =>
-                          handleChunkStartIndexChange(chunk.requestId, newIndex)
-                        }
-                      />
-                    </div>
-                  )}
-
-                  {chunk.features && Object.keys(chunk.features).length > 0 && (
-                    <div className="features-section">
-                      <FeatureTable
-                        features={chunk.features}
-                        signal={chunk.signal}
-                        mask={chunk.masks}
-                        fs={250}
-                      />
-                    </div>
-                  )}
-
-                  {chunk.signalFeatures &&
-                    Object.keys(chunk.signalFeatures).length > 0 && (
-                      <div className="signal-features-section">
-                        <SignalFeaturesViewer
-                          signalFeatures={chunk.signalFeatures}
-                        />
-                      </div>
-                    )}
-
-                  {chunk.decision && (
-                    <div className="diagnosis-section">
-                      <DecisionCard decision={chunk.decision} />
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+          chunksData.map((chunk) => (
+            <ChunkSection
+              key={chunk.requestId}
+              chunk={chunk}
+              isExpanded={expandedChunks.has(chunk.requestId)}
+              onToggle={() => toggleChunk(chunk.requestId)}
+              startIndex={chunkStartIndices[chunk.requestId] || 0}
+              onStartIndexChange={(newIndex) =>
+                handleChunkStartIndexChange(chunk.requestId, newIndex)
+              }
+            />
           ))
         )}
       </div>

@@ -6,6 +6,7 @@ function UploadForm({
   dat,
   hea,
   model,
+  name,
   signalStart,
   signalEnd,
   startStep,
@@ -13,6 +14,7 @@ function UploadForm({
   handleDatChange,
   handleHeaChange,
   handleModelChange,
+  handleNameChange,
   handleSignalStartChange,
   handleSignalEndChange,
   handleStartStepChange,
@@ -41,6 +43,17 @@ function UploadForm({
             files
           </p>
           <div className="file-input-group">
+            <label>
+              <span>Name</span>
+              <input
+                type="text"
+                value={name}
+                onChange={handleNameChange}
+                placeholder="Enter patient name"
+                disabled={isLoading}
+                required
+              />
+            </label>
             <label>
               <span>.HEA File</span>
               <input
